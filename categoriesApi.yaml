@@ -1,0 +1,116 @@
+openapi: 3.0.3
+info:
+  title: Categories API
+  description: API для получения категорий, их названий, изображений и подкатегорий
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001
+
+paths:
+  /categories:
+    get:
+      summary: Получить все категории
+      responses:
+        "200":
+          description: Массив категорий
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+
+  /categories/names:
+    get:
+      summary: Получить только названия категорий
+      responses:
+        "200":
+          description: Массив объектов с названиями
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+
+  /categories/names-images:
+    get:
+      summary: Получить названия и изображения категорий
+      responses:
+        "200":
+          description: Массив объектов с названием и изображением
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    image:
+                      type: string
+                      format: uri
+
+  /categories/{name}:
+    get:
+      summary: Получить подкатегорию по имени основаной категории
+      parameters:
+        - name: name
+          in: path
+          required: true
+          description: Название категории (например, "Телевизоры и аудиотехника")
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Найденная категория
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        "404":
+          description: Категория не найдена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    SubSubcategory:
+      type: object
+      properties:
+        name:
+          type: string
+        quantity:
+          type: integer
+
+    Subcategory:
+      type: object
+      properties:
+        name:
+          type: string
+        subSubcategories:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubSubcategory"
+
+    Category:
+      type: object
+      properties:
+        name:
+          type: string
+        image:
+          type: string
+          format: uri
+        subcategories:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subcategory"

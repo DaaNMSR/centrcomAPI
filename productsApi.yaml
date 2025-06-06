@@ -1,0 +1,106 @@
+openapi: 3.0.3
+info:
+  title: Products API
+  description: API для получения списка продуктов и информации о конкретном продукте
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001
+
+paths:
+  /products:
+    get:
+      summary: Получить список всех продуктов
+      responses:
+        '200':
+          description: Массив продуктов(продукт - объект)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+  /products/{id}:
+    get:
+      summary: Получить продукт по ID
+      parameters:
+        - name: id
+          in: path
+          description: ID продукта
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Информация о продукте
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Продукт не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product not found(component)
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Телевизор Smart 4K BQ 50SU03B
+        article:
+          type: string
+          example: "00061517"
+        hit:
+          type: boolean
+          example: true
+        new:
+          type: boolean
+          example: true
+        price:
+          type: string
+          example: "89 990"
+        description:
+          type: string
+          example: >
+            Данная модель могла быть активирована до продажи. Товар является новым и не проходил процедуру привязки к аккаунту Apple ID...
+        image:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: "http://localhost:3001/public/images/tv.webp"
+        specifications:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+                example: Бренд
+              value:
+                type: string
+                example: Blackton
+        availability:
+          type: object
+          properties:
+            pravda:
+              type: integer
+              example: 1
+            kosorotova:
+              type: integer
+              example: 3
+        creditAvailable:
+          type: boolean
+          example: true
