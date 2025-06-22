@@ -1,0 +1,138 @@
+openapi: 3.0.3
+info:
+  title: categoryProducts API
+  description: API для получения товаров конкретной категории с пагинацией и сортировкой
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001
+
+paths:
+  /category-products/{shortCategory}:
+    get:
+      summary: Получить товары по короткому имени категории
+      tags:
+        - Products
+      parameters:
+        - name: shortCategory
+          in: path
+          description: Короткое имя категории (например, tv, phones, laptops и т.д.)
+          required: true
+          schema:
+            type: string
+            example: tv
+        - name: page
+          in: query
+          description: Номер страницы для пагинации (по умолчанию 1)
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Количество товаров на страницу (по умолчанию 15)
+          required: false
+          schema:
+            type: integer
+            default: 15
+            minimum: 1
+            maximum: 100
+        - name: sortBy
+          in: query
+          description: Сортировка по цене, популярности или дате добавления
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc, popular, new]
+            example: asc
+      responses:
+        "200":
+          description: Список товаров для категории
+          headers:
+            X-Total-Count:
+              description: Общее количество товаров в категории
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FullProduct"
+        "404":
+          description: Категория или товары не найдены
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    FullProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1023
+        name:
+          type: string
+          example: 'Телевизор SuperDisplay 55"'
+        article:
+          type: string
+          example: "AB12CD34EF"
+        hit:
+          type: boolean
+          example: true
+        popularity:
+          type: integer
+          example: 785
+        new:
+          type: boolean
+          example: false
+        price:
+          type: string
+          example: "49999"
+          description: Цена в рублях (строка с числом)
+        description:
+          type: string
+          example: "Отличный телевизор с яркой картинкой и поддержкой HDR."
+        image:
+          type: array
+          items:
+            type: string
+            format: uri
+            example: "https://picsum.photos/seed/abc123/290/304"
+        specifications:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+                example: "Материал"
+              value:
+                type: string
+                example: "Пластик"
+        availability:
+          type: object
+          properties:
+            pravda:
+              type: integer
+              example: 5
+            kosorotova:
+              type: integer
+              example: 10
+        creditAvailable:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-06-21T14:32:00Z"
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Категория не найдена"
