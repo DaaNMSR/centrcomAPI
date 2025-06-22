@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: Categories API
-  description: API для получения категорий, их названий, изображений и подкатегорий
+  title: popupCategories API
+  description: API для получения категорий, их названий, изображений и подкатегорий(popup)
   version: 1.0.0
 servers:
   - url: http://localhost:3001

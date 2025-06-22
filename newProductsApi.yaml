@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Products API
+  title: newProducts API
   description: API для получения списка продуктов и информации о конкретном продукте
   version: 1.0.0
 servers:
@@ -11,14 +11,14 @@ paths:
     get:
       summary: Получить список всех продуктов
       responses:
-        '200':
+        "200":
           description: Массив продуктов(продукт - объект)
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Product'
+                  $ref: "#/components/schemas/Product"
 
   /products/{id}:
     get:
@@ -31,13 +31,13 @@ paths:
           schema:
             type: integer
       responses:
-        '200':
+        "200":
           description: Информация о продукте
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
-        '404':
+                $ref: "#/components/schemas/Product"
+        "404":
           description: Продукт не найден
           content:
             application/json:
