@@ -1,0 +1,70 @@
+openapi: 3.0.3
+info:
+  title: mainCategories API
+  description: API для получения списка всех категорий и конкретную категорию
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001
+
+paths:
+  /main-categories:
+    get:
+      summary: Получить список основных категорий
+      tags:
+        - Categories
+      responses:
+        "200":
+          description: Список категорий
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+
+  /main-categories/{category}:
+    get:
+      summary: Получить категорию по названию
+      tags:
+        - Categories
+      parameters:
+        - name: category
+          in: path
+          required: true
+          description: Название категории (description в нижнем регистре)
+          schema:
+            type: string
+            example: смартфоны и гаджеты
+      responses:
+        "200":
+          description: Найденная категория
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        "404":
+          description: Категория не найдена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Category not found
+
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        imagePath:
+          type: string
+          format: uri
+          example: http://localhost:3001/public/images/phone-categories.png
+        description:
+          type: string
+          example: Смартфоны и гаджеты
+        shortCategory:
+          type: string
+          example: phones
