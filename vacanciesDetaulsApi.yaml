@@ -1,0 +1,102 @@
+openapi: 3.0.3
+info:
+  title: vacanciesShort API
+  description: API для получения подробной информации о вакансии
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001
+
+paths:
+  /vacancies-details:
+    get:
+      summary: Получения подробной информации о вакансиях
+      tags:
+        - Vacancies
+      responses:
+        "200":
+          description: Список подробных вакансий
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VacanciesDetails"
+
+  /vacancies-details/{id}:
+    get:
+      summary: Получить подробности о вакансии по ID
+      tags:
+        - Vacancies
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID вакансии
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Детали вакансии
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VacanciesDetails"
+        "404":
+          description: Вакансия не найдена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Вакансия не найдена
+
+components:
+  schemas:
+    VacanciesDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Помощник компьютерного мастера
+        mainTitle:
+          type: string
+          example: Требования
+        lists:
+          type: array
+          items:
+            type: string
+          example:
+            - Знание ПК выше уровня среднего пользователя
+            - Умение собрать/разобрать системный блок
+        subTitle:
+          type: string
+          example: От нас
+        subLists:
+          type: array
+          items:
+            type: string
+          example:
+            - Стабильный график 5/2
+            - Официальное трудоустройство
+        details:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            Сфера деятельности: IT, интернет, телеком
+            График работы: Полный день
+        location:
+          type: string
+          example: Челябинская область, Магнитогорск, ул. Завенягина, 7А
+        description:
+          type: array
+          items:
+            type: string
+          example:
+            - Зарплата от 35 000 рублей
+            - Мы с радостью примем помощника...
