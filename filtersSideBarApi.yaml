@@ -1,0 +1,59 @@
+openapi: 3.0.3
+info:
+  title: mainCategories API
+  description: API для получения фильтров к конкретной категории товаров
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001
+
+paths:
+  /filters-side-bar/{category}:
+    get:
+      summary: Получить фильтры боковой панели по категории
+      tags:
+        - Filters
+      parameters:
+        - name: category
+          in: path
+          required: true
+          description: Короткое имя категории (например, `tv`, `phones`, `games` и т.д.)
+          schema:
+            type: string
+            example: phones
+      responses:
+        "200":
+          description: Фильтры для указанной категории
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  oneOf:
+                    - type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: Samsung
+                          count:
+                            type: integer
+                            example: 42
+                    - type: array
+                      items:
+                        type: object
+                        properties:
+                          value:
+                            type: string
+                          label:
+                            type: string
+        "404":
+          description: Категория не найдена
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Category not found
